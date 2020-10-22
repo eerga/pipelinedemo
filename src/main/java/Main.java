@@ -10,7 +10,7 @@ public class Main {
     public static final String INFILE = "";
     public static final String DB_CONNECTION = "jdbc:postgresql://postgres:5432/postgres";
 
-    //Parameters
+    //Parameter
     public static final String CONSUME_CSV = "consume-csv";
     public static final String CONSUME_DB = "consume-db";
     public static final String PRODUCE_CSV = "produce-csv";
@@ -21,9 +21,10 @@ public class Main {
     }
 
     public static void main(String[] args) {
+
         if (args[0].equalsIgnoreCase(CONSUME_CSV)) {
             ConsumerSample consumer = new ConsumerSample ();
-            //consumer.start();
+            consumer.start();
         }
         else if (args[0].equalsIgnoreCase(PRODUCE_CSV)){
             ProducerSample producer = new ProducerSample ();

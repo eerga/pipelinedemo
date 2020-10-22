@@ -62,17 +62,9 @@ final class ProducerSample {
         Schema.Parser parser = new Schema.Parser();
         Schema schema = parser.parse(schemaString);
 
-
-        // and the do this stuff in the loop
-
-        // Create Kafka Producer
-
         // establish path to the file
 
         Path path = Paths.get("C://Users//eerga//Downloads//Fall 2020//Computing for Analytics//Week 4 code//capitalbikeshare.csv");
-
-
-        // FIX UP THIS STUFF
 
         Producer producer = ProducerProperties();
 
