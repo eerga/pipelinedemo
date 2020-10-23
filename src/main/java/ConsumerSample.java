@@ -27,12 +27,11 @@ import java.util.Properties;
 public class ConsumerSample extends Thread {
     private KafkaConsumer<String, GenericRecord> consumer;
 
-    public Consumer<String, GenericRecord> createConsumer() {
+    public ConsumerSample() {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        // do I need a group ID???
-        //props.put("group.id", "test");
 
+        props.put("group.id", "test");
         props.put("enable.auto.commit", "false"); // is that valid?
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaAvroDeserializer");
@@ -44,7 +43,7 @@ public class ConsumerSample extends Thread {
         consumer = new KafkaConsumer<>(props);
         //final KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singleton(topic));
-        return consumer;
+
     }
 
     // should we partition our messages? Right now, it's just in batched
