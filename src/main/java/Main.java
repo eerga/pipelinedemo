@@ -5,16 +5,17 @@ public class Main {
     public static final String SCHEMA_REGISTRY = "http://schema-registry:8081";
     public static final String TOPIC = "capitalbikeshare";
 
-    //Data IO
-    public static final String OUTFILE = "";
-    public static final String INFILE = "";
-    public static final String DB_CONNECTION = "jdbc:postgresql://postgres:5432/postgres";
+    //Data
+    // static final String OUTFILE = "output_file.csv";
+    public static final String INFILE = "capitalbikeshare.csv";
+    public static final String DB_CONNECTION = "jdbc:postgresql://localhost:5432/postgres";
 
-    //Parameter
+    //Parameters
     public static final String CONSUME_CSV = "consume-csv";
     public static final String CONSUME_DB = "consume-db";
     public static final String PRODUCE_CSV = "produce-csv";
     public static final String PRODUCE_DB = "produce-db";
+    public static final int limit = 1000;
 
     static void runConsumer() {
         
@@ -29,6 +30,15 @@ public class Main {
         else if (args[0].equalsIgnoreCase(PRODUCE_CSV)){
             ProducerSample producer = new ProducerSample ();
             producer.start();
+        }
+        else if (args[0].equalsIgnoreCase(PRODUCE_DB)){
+            producerDB producer = new producerDB(limit);
+            producer.run_query();
+
+        }
+        else if (args[0].equalsIgnoreCase(CONSUME_DB)){
+            ConsumerDB consumer = new ConsumerDB(limit);
+            consumer.start();
         }
         else {
             System.out.println("Invalid argument");

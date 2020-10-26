@@ -31,11 +31,11 @@ public class ConsumerSample extends Thread {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 
-        props.put("group.id", "test");
+        props.put("group.id", "group1");
         props.put("enable.auto.commit", "false"); // is that valid?
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaAvroDeserializer");
-        props.put("schema.registry.url", "http//127.0.0.1:8081"); //localhost registry
+        props.put("schema.registry.url", "http://127.0.0.1:8081"); //localhost registry
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         String topic = "capitalbikeshare";
@@ -55,7 +55,8 @@ public class ConsumerSample extends Thread {
                 while (true) {
                     ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(100));
                     for (ConsumerRecord<String, GenericRecord> record : records) {
-                        System.out.printf(String.valueOf(record.offset()), record.key(), record.value());
+                        //System.out.printf(String.valueOf(record.offset()), record.key(), record.value());
+                        System.out.println(record.value());
                     }
                 }
             }

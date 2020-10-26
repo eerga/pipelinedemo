@@ -19,7 +19,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 
-final class ProducerSample {
+class ProducerSample {
 
     // initialize values of Topic and CSV file
     private static String KafkaBroker = "localhost:9092";
@@ -27,7 +27,7 @@ final class ProducerSample {
 
     // Should I change Generic record to an Object? IF so, how to?
 
-    private static KafkaProducer<String, GenericRecord> ProducerProperties(){ // added static
+    protected static KafkaProducer<String, GenericRecord> ProducerProperties(){ // added static
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaBroker);
         props.put("group.id", "test");
