@@ -21,7 +21,7 @@ public class ConsumerDB extends ConsumerSample {
         props.put("user", "postgres");
         props.put("password", "Erichka1");
         Properties pros = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        pros.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, broker);
 
         pros.put("group.id", "group1");
         pros.put("enable.auto.commit", "false"); // is that valid?

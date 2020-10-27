@@ -16,10 +16,8 @@ public class Main {
     public static final String PRODUCE_CSV = "produce-csv";
     public static final String PRODUCE_DB = "produce-db";
     public static final int limit = 1000;
+    public static final String broker = "broker:29092";
 
-    static void runConsumer() {
-        
-    }
 
     public static void main(String[] args) {
 
@@ -37,7 +35,7 @@ public class Main {
 
         }
         else if (args[0].equalsIgnoreCase(CONSUME_DB)){
-            ConsumerDB consumer = new ConsumerDB(limit);
+            ConsumerDB consumer = new ConsumerDB(BROKER);
             consumer.start();
         }
         else {
