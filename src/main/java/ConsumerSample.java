@@ -29,7 +29,7 @@ public class ConsumerSample extends Thread {
 
     public ConsumerSample() {
         Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Main.BROKER);
 
         props.put("group.id", "group1");
         props.put("enable.auto.commit", "false"); // is that valid?

@@ -16,18 +16,18 @@ public class ConsumerDB extends ConsumerSample {
     private KafkaConsumer<String, GenericRecord> consumer;
 
 
-    public ConsumerDB(String broker) {
+    public ConsumerDB(String BROKER) {
         Properties props = new Properties();
         props.put("user", "postgres");
         props.put("password", "Erichka1");
         Properties pros = new Properties();
-        pros.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        pros.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Main.BROKER);
 
         pros.put("group.id", "group1");
         pros.put("enable.auto.commit", "false"); // is that valid?
         pros.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         pros.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaAvroDeserializer");
-        pros.put("schema.registry.url", "http://127.0.0.1:8081"); //localhost registry
+        pros.put("schema.registry.url", Main.SCHEMA_REGISTRY);
         pros.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         String topic = "capitalbikeshare";
