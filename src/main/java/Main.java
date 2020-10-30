@@ -1,8 +1,8 @@
 public class Main {
 
     // Kafka
-    public static final String BROKER = "localhost:9092"; //"broker:9092";
-    public static final String SCHEMA_REGISTRY = "http://schema-registry:8081";
+    public static final String BROKER = "localhost:9092";
+    public static final String SCHEMA_REGISTRY = "http://localhost:8081";
     public static final String TOPIC = "capitalbikeshare";
 
     //Data
@@ -15,7 +15,7 @@ public class Main {
     public static final String CONSUME_DB = "consume-db";
     public static final String PRODUCE_CSV = "produce-csv";
     public static final String PRODUCE_DB = "produce-db";
-    public static final int limit = 1000;
+    public static final int limit = -1;
     //public static final String broker = "broker:9092";
 
 
@@ -35,7 +35,7 @@ public class Main {
 
         }
         else if (args[0].equalsIgnoreCase(CONSUME_DB)){
-            ConsumerDB consumer = new ConsumerDB(BROKER);
+            ConsumerDB consumer = new ConsumerDB();
             consumer.start();
         }
         else {

@@ -22,8 +22,8 @@ import java.util.stream.Stream;
 class ProducerSample {
 
     // initialize values of Topic and CSV file
-    private static String KafkaBroker = "localhost:9092";
-    private static String KafkaTopic = "capitalbikeshare";
+    protected static String KafkaBroker = "localhost:9092";
+    protected static String KafkaTopic = "capitalbikeshare";
 
     // Should I change Generic record to an Object? IF so, how to?
 

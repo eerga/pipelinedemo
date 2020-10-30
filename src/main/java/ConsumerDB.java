@@ -16,14 +16,14 @@ public class ConsumerDB extends ConsumerSample {
     private KafkaConsumer<String, GenericRecord> consumer;
 
 
-    public ConsumerDB(String BROKER) {
+    public ConsumerDB() {
         Properties props = new Properties();
         props.put("user", "postgres");
         props.put("password", "Erichka1");
         Properties pros = new Properties();
         pros.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Main.BROKER);
 
-        pros.put("group.id", "group1");
+        pros.put("group.id", "group8");
         pros.put("enable.auto.commit", "false"); // is that valid?
         pros.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         pros.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaAvroDeserializer");
@@ -50,12 +50,13 @@ public class ConsumerDB extends ConsumerSample {
     public void start() {
 
         try {
-            if (consumer == null) currentThread().interrupt();
-            else {
+            //if (consumer == null) currentThread().interrupt();
+            if (consumer != null) {
                 while (true) {
                     ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(100));
                     for (ConsumerRecord<String, GenericRecord> record : records) {
                         onMessage(record.offset(), record.key(), record.value());
+
 
                     }
                 }
@@ -63,9 +64,9 @@ public class ConsumerDB extends ConsumerSample {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (consumer == null) {
-                currentThread().interrupt();
-            } else consumer.close();
+            if (consumer != null) {
+                consumer.close();
+            }
         }
     }
 
@@ -82,7 +83,7 @@ public class ConsumerDB extends ConsumerSample {
                 insertStatement.setString(8, value.get("Bike_number").toString());
                 insertStatement.setString(9, value.get("Member_type").toString());
 
-                insertStatement.executeQuery();
+                insertStatement.executeUpdate();
 
                 System.out.printf("%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                         value.get("Duration").toString(),

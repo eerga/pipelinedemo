@@ -2,16 +2,18 @@ import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.nio.file.Files;
 import java.util.Properties;
 import java.sql.*;
+import java.util.UUID;
 
 
 public class producerDB extends ProducerSample {
     private Connection conn;
     private int limit = 0; // in case of large amount of records, limit the # of output records
-
+    private KafkaProducer<String, GenericRecord> producer;
     private Schema schema;
 
     public producerDB(int limit) {
@@ -19,6 +21,7 @@ public class producerDB extends ProducerSample {
         props.put("user", "postgres");
         props.put("password", "Erichka1");
 
+        producer = ProducerProperties();
 
         String schemaString = "{\"type\":\"record\"," +
                 "\"name\":\"capitalbikeshare\"," +
@@ -68,7 +71,22 @@ public class producerDB extends ProducerSample {
                     avroRecord.put("Bike_number", rs.getString("Bike_number"));
                     avroRecord.put("Member_type", rs.getString("Member_type"));
 
+                    final ProducerRecord<String, GenericRecord> record = new ProducerRecord<String, GenericRecord>(
+                            KafkaTopic, UUID.randomUUID().toString().replace("-", ""),avroRecord);
+
+
+
+                    producer.send(record, (metadata, exception) -> {
+                        if(metadata != null){
+                            //System.out.println("CsvData: "+ record.key()+" "+ record.value());
+                        }
+                        else{
+                            System.out.println("Error Sending Csv Record "+ record.value());
+                        }
+                    });
+
                     count++;
+
                 }
                 System.out.printf("Produced %d records to topic %s\n", count, Main.TOPIC);
 
