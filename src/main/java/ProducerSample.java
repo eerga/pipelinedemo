@@ -16,23 +16,22 @@ import java.nio.file.Files;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.stream.Stream;
+
 
 
 class ProducerSample {
 
-    // initialize values of Topic and CSV file
+    // initialize values of Topic and Broker
     protected static String KafkaBroker = "localhost:9092";
     protected static String KafkaTopic = "capitalbikeshare";
 
-    // Should I change Generic record to an Object? IF so, how to?
-
-    protected static KafkaProducer<String, GenericRecord> ProducerProperties(){ // added static
+    // Create Kafka Producer with properties props
+    protected static KafkaProducer<String, GenericRecord> ProducerProperties(){
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaBroker);
         props.put("group.id", "test");
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "KafkaCsvProducer");
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName()); // String?
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
         props.put("acks", "1");
         props.put("retries", "10");
@@ -42,11 +41,10 @@ class ProducerSample {
         return producer;
     }
 
-    // is this necessary?
-    // in case broker, topic, and file were not declared
+         // records are read from a csv file and produced to a Kafka topic
     public static void start() {
-        // Avro Schema
 
+        // Avro Schema
         String schemaString = "{\"type\":\"record\"," +
                 "\"name\":\"capitalbikeshare\"," +
                 "\"fields\":[{\"name\":\"Duration\",\"type\":\"int\"},"+
@@ -59,15 +57,18 @@ class ProducerSample {
                 "{\"name\":\"Bike_number\",\"type\":\"string\"},"+
                 "{\"name\":\"Member_type\",\"type\":\"string\"}]}";
 
-        // Do the schema parsing
+        // Do the schema parsing to read data correctly
         Schema.Parser parser = new Schema.Parser();
         Schema schema = parser.parse(schemaString);
 
-        // establish path to the file
-
+        // establish path to the CSV file
         Path path = Paths.get("C://Users//eerga//Downloads//Fall 2020//Computing for Analytics//Week 4 code//capitalbikeshare.csv");
 
+        // create record producer
         Producer producer = ProducerProperties();
+
+        //using avro Schema, read CSV file line-by-line
+        // and and load the data to kafka topic
 
         try {
             Files.lines(path).skip(1).forEach(line -> {
@@ -87,7 +88,7 @@ class ProducerSample {
                         KafkaTopic, UUID.randomUUID().toString().replace("-", ""),avroRecord);
 
 
-
+                // print out produced records line-by line
                 producer.send(record, (metadata, exception) -> {
                     if(metadata != null){
                         System.out.println("CsvData: "+ record.key()+" "+ record.value());

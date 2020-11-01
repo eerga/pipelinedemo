@@ -11,18 +11,19 @@ import java.util.UUID;
 
 
 public class producerDB extends ProducerSample {
-    private Connection conn;
-    private int limit = 0; // in case of large amount of records, limit the # of output records
-    private KafkaProducer<String, GenericRecord> producer;
+    private Connection conn;  // declare conn variable to establish connection with DB
+    private int limit = 0; // in case of large amount of records, limit is the # of output records
+    private KafkaProducer<String, GenericRecord> producer;  // create kafka producer
     private Schema schema;
 
     public producerDB(int limit) {
-        Properties props = new Properties();
+        Properties props = new Properties(); // Postgres properties for connecting with DB
         props.put("user", "postgres");
         props.put("password", "Erichka1");
 
-        producer = ProducerProperties();
+        producer = ProducerProperties();    // producer properties
 
+        // Avro Schema
         String schemaString = "{\"type\":\"record\"," +
                 "\"name\":\"capitalbikeshare\"," +
                 "\"fields\":[{\"name\":\"Duration\",\"type\":\"int\"},"+
@@ -35,19 +36,22 @@ public class producerDB extends ProducerSample {
                 "{\"name\":\"Bike_number\",\"type\":\"string\"},"+
                 "{\"name\":\"Member_type\",\"type\":\"string\"}]}";
 
+        // Do the schema parsing to read data correctly
         Schema.Parser parser = new Schema.Parser();
         schema = parser.parse(schemaString);
 
-
-        //Connection conn = DriverManager.getConnection(Main.DB_CONNECTION); // should handle SQLException Error
+        // run the loop of establishing connection with DB
         try {
             conn = DriverManager.getConnection(Main.DB_CONNECTION, props);
         } catch(SQLException throwables) {
             throwables.printStackTrace();
         }
-        this.limit = limit; // this is a better practice to declare limit constant
+        this.limit = limit;
     }
 
+    // After connection is establish, run SQL query select all records
+    //* Running query line by line until there are no more rows
+    // and outputting the number of records pushed from Kafka Producer to Kafka Topic *//
     public void run_query() {
         if(conn != null){
             Statement stmt = null;
@@ -74,11 +78,9 @@ public class producerDB extends ProducerSample {
                     final ProducerRecord<String, GenericRecord> record = new ProducerRecord<String, GenericRecord>(
                             KafkaTopic, UUID.randomUUID().toString().replace("-", ""),avroRecord);
 
-
-
                     producer.send(record, (metadata, exception) -> {
                         if(metadata != null){
-                            //System.out.println("CsvData: "+ record.key()+" "+ record.value());
+
                         }
                         else{
                             System.out.println("Error Sending Csv Record "+ record.value());

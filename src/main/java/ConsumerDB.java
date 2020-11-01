@@ -17,12 +17,12 @@ public class ConsumerDB extends ConsumerSample {
 
 
     public ConsumerDB() {
-        Properties props = new Properties();
+        Properties props = new Properties(); // Postgres properties for connecting with DB
         props.put("user", "postgres");
         props.put("password", "Erichka1");
-        Properties pros = new Properties();
-        pros.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Main.BROKER);
 
+        Properties pros = new Properties(); // Kafka Consumer Properties pros
+        pros.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Main.BROKER);
         pros.put("group.id", "group8");
         pros.put("enable.auto.commit", "false"); // is that valid?
         pros.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
@@ -30,12 +30,14 @@ public class ConsumerDB extends ConsumerSample {
         pros.put("schema.registry.url", Main.SCHEMA_REGISTRY);
         pros.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-        String topic = "capitalbikeshare";
-        // create consumer with appropriate props
+        String topic = "capitalbikeshare"; // Kafka Topic
+
+        // create consumer with Properties props
         consumer = new KafkaConsumer<>(pros);
-        //final KafkaConsumer<String, GenericRecord> consumer = new KafkaConsumer<>(props);
+        // subscribe consumer to a kafka topic
         consumer.subscribe(Collections.singleton(topic));
 
+        // creating record insertion query
         try {
             conn = DriverManager.getConnection(Main.DB_CONNECTION, props);
             String query = "INSERT INTO Output(Duration, Start_date,End_date," +
@@ -49,8 +51,9 @@ public class ConsumerDB extends ConsumerSample {
 
     public void start() {
 
+        //* records are consumer from a kafka stream and line-by-line and inserted into Output table in Postgres
+        // by calling the onMessage method*//
         try {
-            //if (consumer == null) currentThread().interrupt();
             if (consumer != null) {
                 while (true) {
                     ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(100));
