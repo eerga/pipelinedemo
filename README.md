@@ -8,6 +8,7 @@ SQL queries against a Kafka stream and creating real-time Kafka tables.
 Prior to trying to replicate the project, please unzip the csv file in the same directory.
 
 The first part of the project was to familiarize ourselves with Apache Kafka technology by learning how to build two types of simple Pub/Sub pipeline:
+
 1). First pipeline involved creating a producer that would read a csv file and serialize each message (row in a csv file table), using Avro serialization 
 and push the serialized message onto Kafka Streams.Then, build a Kafka consumer that would consume records from Kafka stream by deserializing the message 
 and outputting the cloned csv output file into a designated place. 
