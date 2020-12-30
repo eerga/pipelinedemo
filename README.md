@@ -7,6 +7,7 @@ SQL queries against a Kafka stream and creating real-time Kafka tables.
 
 Prior to trying to replicate the project, please unzip the csv file in the same directory.
 Also, this project uses Confluent Platform's docker container (cp-all-in-one), so make sure to spin it before starting a Kafka producer by running the following command:
+
 docker-compose up -d (make sure your Docker is on :) )
 
 The first part of the project was to familiarize ourselves with Apache Kafka technology by learning how to build two types of simple Pub/Sub pipeline:
